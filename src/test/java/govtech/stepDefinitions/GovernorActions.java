@@ -31,18 +31,20 @@ public class GovernorActions extends ChromeDriverSetup {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             String birthDateString = df.format(birthDate);
 
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("natid")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("name")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("gender")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",birthDateString))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("salary")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("tax_paid")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']", results.getString("natid")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']", results.getString("name")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']", results.getString("gender")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']", birthDateString))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']", results.getDouble("salary")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']", results.getDouble("tax_paid")))).isDisplayed());
         }
     }
+
     @Before("@GovernorFeatures")
     public void setUp() {
         setUpChromeDriver();
     }
+
     @Given("I am logged in as the Governor")
     public void i_am_logged_in_as_the_governor() {
         driver.get(Constants.BASE_URL + LogInPage.logInEndPoint);
@@ -67,6 +69,7 @@ public class GovernorActions extends ChromeDriverSetup {
         }
 
     }
+
     @Then("The total number of entries matches the total in the {string} database")
     public void the_total_number_of_entries_matches_the_total_in_the_database(String string) throws SQLException {
         ResultSet results = CommonActions.setUpAndQueryDataBase("SELECT COUNT(*) FROM working_class_heroes");
@@ -75,8 +78,8 @@ public class GovernorActions extends ChromeDriverSetup {
             totalCountFromDb = results.getString(1);
         }
         String totalResults = GovernorPages.searchAllTableInfo(driver).getText();
-        String totalEntries = totalResults.substring(totalResults.indexOf("of ")+3, totalResults.indexOf(" entries"));
-        Assert.assertEquals(totalCountFromDb,totalEntries);
+        String totalEntries = totalResults.substring(totalResults.indexOf("of ") + 3, totalResults.indexOf(" entries"));
+        Assert.assertEquals(totalCountFromDb, totalEntries);
     }
 
     @When("I search for natid {string}")
@@ -84,15 +87,16 @@ public class GovernorActions extends ChromeDriverSetup {
         GovernorPages.searchAllTableInput(driver).sendKeys("natid-2");
         wait.until(ExpectedConditions.invisibilityOf(GovernorPages.searchAllProcessingTable(driver)));
     }
+
     @Then("I see the results for natid {string}")
     public void i_see_the_results_for_natid(String natId) throws SQLException {
-        ResultSet results = CommonActions.setUpAndQueryDataBaseByNatId("SELECT * FROM working_class_heroes WHERE natid= ?",natId);
+        ResultSet results = CommonActions.setUpAndQueryDataBaseByNatId("SELECT * FROM working_class_heroes WHERE natid= ?", natId);
         checkRowDataMatches(results);
     }
 
     @When("I search for name with {string}")
     public void i_search_for_name_with_natid(String natId) throws SQLException {
-        ResultSet results = CommonActions.setUpAndQueryDataBaseByNatId("SELECT * FROM working_class_heroes WHERE natid= ?",natId);
+        ResultSet results = CommonActions.setUpAndQueryDataBaseByNatId("SELECT * FROM working_class_heroes WHERE natid= ?", natId);
         while (results.next()) {
             name = results.getString("name");
         }
@@ -100,10 +104,11 @@ public class GovernorActions extends ChromeDriverSetup {
         wait.until(ExpectedConditions.invisibilityOf(GovernorPages.searchAllProcessingTable(driver)));
 
     }
+
     @Then("I see the results for name with {string}")
     public void i_see_the_results_for_name_with_(String natId) throws SQLException {
-        ResultSet results = CommonActions.setUpAndQueryDataBase("SELECT * FROM working_class_heroes WHERE name= '"+ name + "'");
-       checkRowDataMatches(results);
+        ResultSet results = CommonActions.setUpAndQueryDataBase("SELECT * FROM working_class_heroes WHERE name= '" + name + "'");
+        checkRowDataMatches(results);
     }
 
 

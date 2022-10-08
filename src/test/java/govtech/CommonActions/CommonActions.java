@@ -10,6 +10,7 @@ public class CommonActions {
         connection.close();
         return results;
     }
+
     public static ResultSet setUpAndQueryDataBaseByNatId(String query, String natId) throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/testdb?user=user&password=pwd");
         PreparedStatement stmt = connection.prepareStatement(query);

@@ -24,6 +24,21 @@ import java.util.List;
 public class GovernorActions extends ChromeDriverSetup {
 
     private String name;
+
+    private void checkRowDataMatches(ResultSet results) throws SQLException {
+        while (results.next()) {
+            Date birthDate = results.getDate("birth_date");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            String birthDateString = df.format(birthDate);
+
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("natid")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("name")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("gender")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",birthDateString))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("salary")))).isDisplayed());
+            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("tax_paid")))).isDisplayed());
+        }
+    }
     @Before("@GovernorFeatures")
     public void setUp() {
         setUpChromeDriver();
@@ -72,18 +87,7 @@ public class GovernorActions extends ChromeDriverSetup {
     @Then("I see the results for natid {string}")
     public void i_see_the_results_for_natid(String natId) throws SQLException {
         ResultSet results = CommonActions.setUpAndQueryDataBaseByNatId("SELECT * FROM working_class_heroes WHERE natid= ?",natId);
-        while (results.next()) {
-            Date birthDate = results.getDate("birth_date");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            String birthDateString = df.format(birthDate);
-
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("natid")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("name")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("gender")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",birthDateString))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("salary")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("tax_paid")))).isDisplayed());
-        }
+        checkRowDataMatches(results);
     }
 
     @When("I search for name with {string}")
@@ -99,18 +103,7 @@ public class GovernorActions extends ChromeDriverSetup {
     @Then("I see the results for name with {string}")
     public void i_see_the_results_for_name_with_(String natId) throws SQLException {
         ResultSet results = CommonActions.setUpAndQueryDataBase("SELECT * FROM working_class_heroes WHERE name= '"+ name + "'");
-        while (results.next()) {
-            Date birthDate = results.getDate("birth_date");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            String birthDateString = df.format(birthDate);
-
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("natid")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("name")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",results.getString("gender")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%s']",birthDateString))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("salary")))).isDisplayed());
-            Assert.assertTrue(driver.findElement(By.xpath(String.format("//*[text()='%.2f']",results.getDouble("tax_paid")))).isDisplayed());
-        }
+       checkRowDataMatches(results);
     }
 
 

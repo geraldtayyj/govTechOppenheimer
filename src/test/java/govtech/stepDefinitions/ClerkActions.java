@@ -95,7 +95,7 @@ public class ClerkActions extends ChromeDriverSetup {
 
     @After("@ClerkFeatures")
     public void tearDown() {
-        driver.close();
+        driver.quit();
     }
 
 }

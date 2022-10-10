@@ -146,7 +146,7 @@ public class BookkeeperActions extends ChromeDriverSetup {
 
     @After("@UITest")
     public void tearDown() {
-        driver.close();
+        driver.quit();
     }
 
     @After("@deleteTaxReliefFile")

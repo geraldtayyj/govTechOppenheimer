@@ -114,7 +114,7 @@ public class GovernorActions extends ChromeDriverSetup {
 
     @After("@GovernorFeatures")
     public void tearDown() {
-        driver.close();
+        driver.quit();
     }
 
 

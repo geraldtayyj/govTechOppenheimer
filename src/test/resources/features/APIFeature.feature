@@ -1,4 +1,4 @@
-Feature: Create single working class hero via API call
+Feature: Create single working class hero via API call to /api/v1/hero
 
   @postWithValidPayload
   Scenario: TC1 Post request /api/v1/hero with valid payload {
